@@ -1,0 +1,27 @@
+- name: "MHA installer"
+  hosts: "127.0.0.1"
+  connection: "local"
+  roles:
+    - workstation
+
+- name: Harden sysctl
+  hosts: all
+  tasks:
+    - name: Write the sysctl config file
+      ansible.builtin.copy:
+        src: templates/sysctl/90-mika.conf
+        dest: /etc/sysctl.d/90-mika.conf
+        mode: '600'
+        owner: root
+        group: root
+
+- name: Configure syslog
+  hosts: all
+  tasks:
+    - name: Write the rsyslog config file
+      ansible.builtin.copy:
+        src: templates/rsyslog.d/mika.conf
+        dest: /etc/rsyslog.d/mika.conf
+        mode: '600'
+        owner: root
+        group: root
